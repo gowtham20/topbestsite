@@ -34,13 +34,11 @@ def load():
     #oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Search', 'search.png', oOutputParameterHandler)
 
     liste = []
-    liste.append( ["Drama Juniors","https://emailradhesh.github.io/topbestsite/"] )
     liste.append( ["Reality shows","https://raw.githubusercontent.com/emailradhesh/topbestsite/master/reality-shows/index.html"] )
-    liste.append( ["Hindi Movies","http://www.topbestsite.com/hindi-movies"] )
-    liste.append( ["Telugu Movies","http://telugumv.weebly.com/telugu-movies"] )
-    liste.append( ["Tamil Movies","http://recenttamilmovie.weebly.com/tamil-movies"] )
-    liste.append( ["Malayalam Movies","http://recentmalayalammovie.weebly.com/malayalam-movies"] )
-
+    liste.append( ["Kannada Movies","https://raw.githubusercontent.com/emailradhesh/topbestsite/master/kannada-movies/index.html"] )
+    liste.append( ["Hindi Movies","https://raw.githubusercontent.com/emailradhesh/topbestsite/master/hindi-movies/index.html"] )
+    liste.append( ["Telugu Movies","https://raw.githubusercontent.com/emailradhesh/topbestsite/master/telugu-movies/index.html"] )
+    liste.append( ["Tamil Movies","https://raw.githubusercontent.com/emailradhesh/topbestsite/master/tamil-movies/index.html"] )
 
     for sTitle,sUrl in liste:
 
