@@ -134,7 +134,7 @@ def showHosters():
     #sPattern = '(.+?)<iframe src="(.+?)"></iframe>'   
     #sPattern = '<a href="(.+?)">(.+?)<'       
     #sPattern = '(.+?)>(.+?)<'       
-    sPattern = '<p>(.+?)</p><iframe.+?src="(.+?)"'       
+    sPattern = '<p>(.+?)</p><iframe\s.+?src="(.+?)"'       
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
