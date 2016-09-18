@@ -14,13 +14,13 @@ SITE_IDENTIFIER = 'topbestsite_com'
 SITE_NAME = 'TopBestSite'
 SITE_DESC = 'For Kannadigas from TopBestSite'
 
-URL_MAIN = 'http://www.topbestsite.com'
+URL_MAIN = 'https://raw.githubusercontent.com/emailradhesh/topbestsite/master/'
 
-MOVIE_NETS = ('http://www.topbestsite.com/kannada-movies', 'showMovies')
+#MOVIE_NETS = ('http://www.topbestsite.com/kannada-movies', 'showMovies')
 
 MOVIE_NETS = ('http://', 'load')
-NETS_NEWS =  ('http://www.topbestsite.com/reality-shows.html', 'showMovies')
-NETS_GENRES = (True, 'load')
+#NETS_NEWS =  ('http://www.topbestsite.com/reality-shows.html', 'showMovies')
+#NETS_GENRES = (True, 'load')
 
 #URL_SEARCH = ('http://www.notre-ecole.net/?s=', 'showMovies')
 #FUNCTION_SEARCH = 'showMovies'
@@ -34,12 +34,12 @@ def load():
     #oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Search', 'search.png', oOutputParameterHandler)
 
     liste = []
-    liste.append( ["Reality shows","https://raw.githubusercontent.com/emailradhesh/topbestsite/master/reality-shows/index.html"] )
-    liste.append( ["Kannada Movies","https://raw.githubusercontent.com/emailradhesh/topbestsite/master/kannada-movies/index.html"] )
-    liste.append( ["Hindi Movies","https://raw.githubusercontent.com/emailradhesh/topbestsite/master/hindi-movies/index.html"] )
-    liste.append( ["Telugu Movies","https://raw.githubusercontent.com/emailradhesh/topbestsite/master/telugu-movies/index.html"] )
-    liste.append( ["Tamil Movies","https://raw.githubusercontent.com/emailradhesh/topbestsite/master/tamil-movies/index.html"] )
-
+    liste.append( ["Reality shows", URL_MAIN + 'reality-shows/index.html'] )
+    liste.append( ["Kannada Movies", URL_MAIN + 'kannada-movies/index.html'] )
+    liste.append( ["Hindi Movies", URL_MAIN + 'hindi-movies/index.html'] )
+    liste.append( ["Telugu Movies", URL_MAIN + 'telugu-movies/index.html'] )
+    liste.append( ["Tamil Movies", URL_MAIN + 'tamil-movies/index.html'] )
+    liste.append( ["Misc", URL_MAIN + 'temp.html'] )
     for sTitle,sUrl in liste:
 
         oOutputParameterHandler = cOutputParameterHandler()
@@ -48,33 +48,32 @@ def load():
 
     oGui.setEndOfDirectory()
 
-def showSearch():
-    oGui = cGui()
+#def showSearch():
+    #oGui = cGui()
 
-    sSearchText = oGui.showKeyBoard()
-    if (sSearchText != False):
-            sUrl = 'http://www.topbestsite.com'+sSearchText
-            showMovies(sUrl)
-            oGui.setEndOfDirectory()
-            return
+    #sSearchText = oGui.showKeyBoard()
+    #if (sSearchText != False):
+            #sUrl = 'http://www.topbestsite.com'+sSearchText
+            #showMovies(sUrl)
+            #oGui.setEndOfDirectory()
+            #return
 
 
 def showMovies(sSearch = ''):
     oGui = cGui()
-    if sSearch:
-      sUrl = sSearch
-    else:
-        oInputParameterHandler = cInputParameterHandler()
-        sUrl = oInputParameterHandler.getValue('siteUrl')
+    #if sSearch:
+      #sUrl = sSearch
+    #else:
+        #oInputParameterHandler = cInputParameterHandler()
+        #sUrl = oInputParameterHandler.getValue('siteUrl')
+    oInputParameterHandler = cInputParameterHandler()
+    sUrl = oInputParameterHandler.getValue('siteUrl')
 
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request();
-    #sHtmlContent = sHtmlContent.replace(' target="_blank"', "");
-    #sPattern = '<h2 class="wsite-content-title" style="text-align:left;"><font size="5"><a href="(.+?)">(.+?)<'
-    sPattern = '<a href="(.+?)">(.+?)<'    
+    sPattern = '<a href="(.+?)">(.+?)<\/a>'    
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
-    #print aResult
     if (aResult[0] == True):
         total = len(aResult[1])
         dialog = cConfig().createDialog(SITE_NAME)
@@ -84,8 +83,6 @@ def showMovies(sSearch = ''):
                 break
 
             sTitle = aEntry[1]
-            #print sTitle
-            #sTitle = (aEntry[1].replace('&gt;&gt;','')).replace('*&nbsp;','')
             oOutputParameterHandler = cOutputParameterHandler()
             oOutputParameterHandler.addParameter('siteUrl', str(aEntry[0]))
             oOutputParameterHandler.addParameter('sMovieTitle', str(sTitle))
@@ -94,24 +91,22 @@ def showMovies(sSearch = ''):
 
         cConfig().finishDialog(dialog)
 
-        #sNextPage = __checkForNextPage(sHtmlContent)
-        #if (sNextPage != False):
-            #oOutputParameterHandler = cOutputParameterHandler()
-            #oOutputParameterHandler.addParameter('siteUrl', sNextPage)
-            #oGui.addDir(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Next >>>[/COLOR]', 'next.png', oOutputParameterHandler)
+        sNextPage = __checkForNextPage(sHtmlContent)
+        if (sNextPage != False):
+            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
+            oGui.addDir(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Next >>>[/COLOR]', 'next.png', oOutputParameterHandler)
 
-    if not sSearch:
-        oGui.setEndOfDirectory()
-
+    #if not sSearch:
+        #oGui.setEndOfDirectory()
+    oGui.setEndOfDirectory()
 
 def __checkForNextPage(sHtmlContent):
-    #sPattern = '<span class="current">.+?</span><a href="(.+?)" title=\'.+?\'>.+?</a>'
-    sPattern = 'src="(.+?)"'
-    #sPattern = '<a href="(.+?)">(.+?)<'
+    sPattern = '<a href="(.+?)"><i>'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if (aResult[0] == True):
-        return URL_MAIN+aResult[1][0]
+        return aResult[1][0]
 
     return False
 
@@ -122,23 +117,12 @@ def showHosters():
     sUrl = oInputParameterHandler.getValue('siteUrl')
     sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
-    #print (sUrl)
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request();
-    #sHtmlContent = sHtmlContent.replace('</p>\n<iframe', '</p><iframe');
-    #sHtmlContent = sHtmlContent.replace('<strong>', '');
-    #sHtmlContent = sHtmlContent.replace('</strong>', '');
-    #sPattern = 'file: "(.+?)", label: "(.+?)"'
-    
-    #sPattern = '<p><strong>(.+?)</strong></p><iframe src="(.+?)"'
-    #sPattern = '(.+?)<iframe src="(.+?)"></iframe>'   
-    #sPattern = '<a href="(.+?)">(.+?)<'       
-    #sPattern = '(.+?)>(.+?)<'       
     sPattern = '<p>(.+?)</p><iframe\s.+?src="(.+?)"'       
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
 
-    #print aResult
     if (aResult[0] == True):
         total = len(aResult[1])
         dialog = cConfig().createDialog(SITE_NAME)
@@ -148,11 +132,7 @@ def showHosters():
                 break
 
             sHosterUrl = aEntry[1]
-            #print sHosterUrl
-            #sHosterUrl = str(aEntry[0])
             sTitle = aEntry[0]
-            #sTitle = sMovieTitle+' | '+aEntry[1]
-            #print sTitle
             oHoster = cHosterGui().checkHoster(sHosterUrl)
             if (oHoster != False):
                 oHoster.setDisplayName(sTitle)
