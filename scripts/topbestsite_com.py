@@ -1,5 +1,4 @@
 #-*- coding: utf-8 -*-
-#Venom.
 from resources.lib.gui.hoster import cHosterGui
 from resources.lib.handler.hosterHandler import cHosterHandler
 from resources.lib.gui.gui import cGui
@@ -16,14 +15,7 @@ SITE_DESC = 'For Kannadigas from TopBestSite'
 
 URL_MAIN = 'https://raw.githubusercontent.com/emailradhesh/topbestsite/master/'
 
-#MOVIE_NETS = ('http://www.topbestsite.com/kannada-movies', 'showMovies')
-
 MOVIE_NETS = ('http://', 'load')
-#NETS_NEWS =  ('http://www.topbestsite.com/reality-shows.html', 'showMovies')
-#NETS_GENRES = (True, 'load')
-
-#URL_SEARCH = ('http://www.notre-ecole.net/?s=', 'showMovies')
-#FUNCTION_SEARCH = 'showMovies'
 
 def load():
 
@@ -31,7 +23,6 @@ def load():
 
     oOutputParameterHandler = cOutputParameterHandler()
     oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
-    #oGui.addDir(SITE_IDENTIFIER, 'showSearch', 'Search', 'search.png', oOutputParameterHandler)
 
     liste = []
     liste.append( ["Reality shows", URL_MAIN + 'reality-shows/index.html'] )
@@ -39,7 +30,7 @@ def load():
     liste.append( ["Hindi Movies", URL_MAIN + 'hindi-movies/index.html'] )
     liste.append( ["Telugu Movies", URL_MAIN + 'telugu-movies/index.html'] )
     liste.append( ["Tamil Movies", URL_MAIN + 'tamil-movies/index.html'] )
-    liste.append( ["Misc", URL_MAIN + 'temp.html'] )
+
     for sTitle,sUrl in liste:
 
         oOutputParameterHandler = cOutputParameterHandler()
@@ -48,24 +39,9 @@ def load():
 
     oGui.setEndOfDirectory()
 
-#def showSearch():
-    #oGui = cGui()
-
-    #sSearchText = oGui.showKeyBoard()
-    #if (sSearchText != False):
-            #sUrl = 'http://www.topbestsite.com'+sSearchText
-            #showMovies(sUrl)
-            #oGui.setEndOfDirectory()
-            #return
-
 
 def showMovies(sSearch = ''):
     oGui = cGui()
-    #if sSearch:
-      #sUrl = sSearch
-    #else:
-        #oInputParameterHandler = cInputParameterHandler()
-        #sUrl = oInputParameterHandler.getValue('siteUrl')
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
 
@@ -97,12 +73,11 @@ def showMovies(sSearch = ''):
             oOutputParameterHandler.addParameter('siteUrl', sNextPage)
             oGui.addDir(SITE_IDENTIFIER, 'showMovies', '[COLOR teal]Next >>>[/COLOR]', 'next.png', oOutputParameterHandler)
 
-    #if not sSearch:
-        #oGui.setEndOfDirectory()
     oGui.setEndOfDirectory()
 
+
 def __checkForNextPage(sHtmlContent):
-    sPattern = '<a href="(.+?)"><i>'
+    sPattern = '<a target="_blank" href="(.+?)">'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if (aResult[0] == True):
