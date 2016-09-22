@@ -13,7 +13,7 @@ SITE_IDENTIFIER = 'topbestsite_com'
 SITE_NAME = 'TopBestSite'
 SITE_DESC = 'For Kannadigas from TopBestSite'
 
-URL_MAIN = 'https://raw.githubusercontent.com/emailradhesh/topbestsite/master/'
+URL_MAIN = 'http://localhost/'
 
 MOVIE_NETS = ('http://', 'load')
 
@@ -22,14 +22,14 @@ def load():
     oGui = cGui()
 
     oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://venom/')
+    oOutputParameterHandler.addParameter('siteUrl', 'http://localhost/')
 
     liste = []
-    liste.append( ["Reality shows", URL_MAIN + 'reality-shows/index.html'] )
-    liste.append( ["Kannada Movies", URL_MAIN + 'kannada-movies/index.html'] )
-    liste.append( ["Hindi Movies", URL_MAIN + 'hindi-movies/index.html'] )
-    liste.append( ["Telugu Movies", URL_MAIN + 'telugu-movies/index.html'] )
-    liste.append( ["Tamil Movies", URL_MAIN + 'tamil-movies/index.html'] )
+    liste.append( ["Reality shows", URL_MAIN + 'reality-shows.html'] )
+    liste.append( ["Kannada Movies", URL_MAIN + 'kannada-movies.html'] )
+    liste.append( ["Hindi Movies", URL_MAIN + 'hindi-movies.html'] )
+    liste.append( ["Telugu Movies", URL_MAIN + 'telugu-movies.html'] )
+    liste.append( ["Tamil Movies", URL_MAIN + 'tamil-movies.html'] )
 
     for sTitle,sUrl in liste:
 
@@ -44,10 +44,9 @@ def showMovies(sSearch = ''):
     oGui = cGui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
-
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request();
-    sPattern = '<a href="(.+?)">(.+?)<\/a>'    
+    sPattern = '<a href="(.+?)">(.+?)<\/a>'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if (aResult[0] == True):
@@ -77,11 +76,15 @@ def showMovies(sSearch = ''):
 
 
 def __checkForNextPage(sHtmlContent):
-    sPattern = '<a target="_blank" href="(.+?)">'
+    sPattern = '<a target="_self" href="(.+?)">'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
     if (aResult[0] == True):
-        return aResult[1][0]
+        nextPage = aResult[1][0]    
+        if not nextPage.lower().startswith("http"):
+        	nextPage = URL_MAIN + nextPage        
+        #return aResult[1][0]
+        return nextPage
 
     return False
 
@@ -90,14 +93,18 @@ def showHosters():
     oGui = cGui()
     oInputParameterHandler = cInputParameterHandler()
     sUrl = oInputParameterHandler.getValue('siteUrl')
-    sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    #sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
+    sMovieTitle = ''
+    if (oInputParameterHandler.getValue('sMovieTitle') != False):
+    	sMovieTitle = oInputParameterHandler.getValue('sMovieTitle')
     sThumbnail = oInputParameterHandler.getValue('sThumbnail')
+    if not sUrl.lower().startswith("http"):
+        sUrl = URL_MAIN + sUrl
     oRequestHandler = cRequestHandler(sUrl)
     sHtmlContent = oRequestHandler.request();
-    sPattern = '<p>(.+?)</p><iframe\s.+?src="(.+?)"'       
+    sPattern = '<p>(.+?)</p><ifram.+?\ssrc="(.+?)"'
     oParser = cParser()
     aResult = oParser.parse(sHtmlContent, sPattern)
-
     if (aResult[0] == True):
         total = len(aResult[1])
         dialog = cConfig().createDialog(SITE_NAME)
@@ -115,5 +122,9 @@ def showHosters():
                 cHosterGui().showHoster(oGui, oHoster, sHosterUrl, sThumbnail)
 
         cConfig().finishDialog(dialog)
-
+        sNextPage = __checkForNextPage(sHtmlContent)
+        if (sNextPage != False):
+            oOutputParameterHandler = cOutputParameterHandler()
+            oOutputParameterHandler.addParameter('siteUrl', sNextPage)
+            oGui.addDir(SITE_IDENTIFIER, 'showHosters', '[COLOR teal]Next >>>[/COLOR]', 'next.png', oOutputParameterHandler)        
     oGui.setEndOfDirectory()
