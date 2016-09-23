@@ -13,7 +13,7 @@ SITE_IDENTIFIER = 'topbestsite_com'
 SITE_NAME = 'TopBestSite'
 SITE_DESC = 'For Kannadigas from TopBestSite'
 
-URL_MAIN = 'http://localhost/'
+URL_MAIN = 'https://emailradhesh.github.io/topbestsite/'
 
 MOVIE_NETS = ('http://', 'load')
 
@@ -22,7 +22,7 @@ def load():
     oGui = cGui()
 
     oOutputParameterHandler = cOutputParameterHandler()
-    oOutputParameterHandler.addParameter('siteUrl', 'http://localhost/')
+    oOutputParameterHandler.addParameter('siteUrl', 'https://emailradhesh.github.io/topbestsite/')
 
     liste = []
     liste.append( ["Reality shows", URL_MAIN + 'reality-shows.html'] )
