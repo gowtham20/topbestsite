@@ -26,6 +26,7 @@ def load():
 
     liste = []
     liste.append( ["Reality shows", URL_MAIN + 'reality-shows.html'] )
+    liste.append( ["Reality shows completed", URL_MAIN + 'reality-shows-completed.html'] )    
     liste.append( ["Kannada Movies", URL_MAIN + 'kannada-movies.html'] )
     liste.append( ["Hindi Movies", URL_MAIN + 'hindi-movies.html'] )
     liste.append( ["Telugu Movies", URL_MAIN + 'telugu-movies.html'] )
