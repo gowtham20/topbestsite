@@ -9,6 +9,7 @@ This is specifically meant to watch TopBestSite in Kodi. I've not added a licens
 1. Download the script for [TopBestSite](https://github.com/emailradhesh/topbestsite/blob/master/scripts/topbestsite_com.py)
 1. Install the script to .kodi/addons/plugins.video.vstream/resources/sites directory.
 1. Start Kodi
+1. Open *Vstream* add-on > *Web Videos* > *Sources* > *TopBestSite*
 
 ##### Known issues
 
